@@ -13,6 +13,9 @@ current_time = datetime.now()
 timestamp = current_time.strftime("%m-%d-%Y %H:%M:%S")
 
 def shelter():
+    """
+    Displays shetler info.
+    """
     print(f"Shelter Name: {shelter1["shelter_name"]}")
     print(f"Leader: {shelter1["leader"]}")
     print(f"Survivors: {shelter1["survivors"]}")
@@ -24,11 +27,17 @@ def shelter():
     else:
         print("Radio: Not working.")
 
-def dumpshelter(info):
+def dumpshelter(info:dict) -> json:
+    """
+    Dumps the inputted info into shelter.json
+    """
     with open("shelter.json", "w", encoding="utf-8") as file: 
         json.dump(info, file, indent=4)
 
 def makechange(shelter_data:dict):
+    """
+    Displays the shelter info and asks the user for a change, and inputs that change while adding it to changes.log and displaying the change.
+    """
     print("CURRENT SHELTER DATA")
     print(f"1. Shelter Name: {shelter_data["shelter_name"]}")
     print(f"2. Leader: {shelter_data["leader"]}")
@@ -129,11 +138,17 @@ def makechange(shelter_data:dict):
     
 
 def changes(change):
+    """
+    Puts a change into changes.log, the input from the function.
+    """
     entry = f"{timestamp} | {change}" 
     with open("changes.log", "a", encoding="utf-8") as file: 
         file.write(entry + "\n")
 
 def getchanges():
+    """
+    Prints all changes from changes.log, unless nothing is in it as it'll say, "There have been no changes." or "No change entries have been saved yet."
+    """
     try:
         with open("changes.log", "r", encoding="utf-8") as file: 
             changes_text = file.read() 
@@ -144,7 +159,11 @@ def getchanges():
     except FileNotFoundError: 
         print("No change entries have been saved yet.")
 
-def menu():
+def menu() -> None:
+    """
+    Main Menu display of the Zombie Shelter.
+    Gets choice from user and returns their input.    
+    """
     print("Zombie Shelter Manager")
     print("1. View shelter information")
     print("2. Change a shelter value")
