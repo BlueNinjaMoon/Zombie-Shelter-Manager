@@ -30,7 +30,6 @@ def dumpshelter(info):
 
 def makechange(shelter_data:dict):
     print("CURRENT SHELTER DATA")
-
     print(f"1. Shelter Name: {shelter_data["shelter_name"]}")
     print(f"2. Leader: {shelter_data["leader"]}")
     print(f"3. Survivors: {shelter_data["survivors"]}")
@@ -78,6 +77,7 @@ def makechange(shelter_data:dict):
 
     user = None
     loop = True
+    digit = True
     while loop != False:
         try:
             if chose == "shelter_name":
@@ -93,36 +93,35 @@ def makechange(shelter_data:dict):
             elif chose == "barricade_health":
                 user = int(input("How much health does the barricade have?: "))
             elif chose == "radio_working":
-                user = str(input("Is the radio working? (Yes/y or No/n): "))
-
-                if user.lower() in ["yes","y"]:
-                    user = True
-                elif user.lower() in ["no","n"]:
-                    user = False
-                elif user not in ["yes","y","no","n"]:
+                user = input("Is the radio working? (Yes/y or No/n): ")
+                while user.isdigit() != False:
+                    print("Invalid, must be Yes/y or No/n.")
+                    user = input("Is the radio working? (Yes/y or No/n): ")
+                if user not in ["yes","y","no","n"]:
                     raise ValueError("Invalid choice. (No/n or Yes/y)")
-            else:
-                raise ValueError("Invalid choice.")
-                
+            loop = False
         except ValueError:
-            print("Invalid")
+            print("Invalid, ValueError.")
             loop = True
-        except AttributeError:
-            print("Invalid")
-            loop = True
-        
-        loop = False
-
+    if chose == "radio_working":
+        digit = False
+    if digit != True:
+        if user.lower() in ["y","yes"]:
+            user = True
+        else:
+            if user.lower() in ["n","no"]:
+                user = False
     shelter_data.update({chose: user})
-
     if user == True:
         user = "Working."
-    if user == False:
+    elif user == False:
         user = "Not working."
+    else:
+        user = user
 
     if user != prev:
         print(f"Previous: {prev}")
-        print(f"Current: {shelter_data[chose]}")
+        print(f"Current: {user}")
         dumpshelter(shelter_data)
         changes(f"{chose} was changed to {user}")
     else:
